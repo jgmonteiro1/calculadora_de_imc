@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
   void _resetFields(){
     setState(() {
       _infoText  = "Informe os seus dados";
+      _formKey = GlobalKey<FormState>();
     });
     pesoController.text = "";
     alturaController.text= "";
