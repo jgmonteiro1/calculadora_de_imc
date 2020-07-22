@@ -15,6 +15,8 @@ class _HomeState extends State<Home> {
   TextEditingController pesoController = TextEditingController();
   TextEditingController alturaController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String _infoText = "Informe seus dados!";
 
   //Função para o botão de reset
@@ -66,43 +68,61 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Icon(Icons.person_outline, size: 120, color: Colors.lightGreen),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: "Peso (kg)",
-                  labelStyle: TextStyle(color: Colors.green)),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 25.0),
-              controller: pesoController,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: "Altura (cm)",
-                  labelStyle: TextStyle(color: Colors.green)),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 25.0),
-              controller: alturaController,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Container(
-                height: 50.0,
-                child: RaisedButton(
-                  onPressed: _calcularImc,
-                  child: Text("Calcular", style: TextStyle(color: Colors.white, fontSize: 25.0)),
-                  color: Colors.green,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Icon(Icons.person_outline, size: 120, color: Colors.lightGreen),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: "Peso (kg)",
+                    labelStyle: TextStyle(color: Colors.green)),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.green, fontSize: 25.0),
+                controller: pesoController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return "Insira seu peso!";
+                  }
+                },
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: "Altura (cm)",
+                    labelStyle: TextStyle(color: Colors.green)),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.green, fontSize: 25.0),
+                controller: alturaController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return "Insira sua altura!";
+                  }
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Container(
+                  height: 50.0,
+                  child: RaisedButton(
+                    onPressed: (){
+                      //Se o formulário estiver válido ele chama a função para calcular
+                      if(_formKey.currentState.validate()){
+                        _calcularImc();
+                      }
+                    },
+                    child: Text("Calcular", style: TextStyle(color: Colors.white, fontSize: 25.0)),
+                    color: Colors.green,
 
+                  ),
                 ),
               ),
-            ),
-            Text(_infoText, textAlign: TextAlign.center, style: TextStyle(color: Colors.green, fontSize: 25.0),)
-          ],
-        ),
+              Text(_infoText, textAlign: TextAlign.center, style: TextStyle(color: Colors.green, fontSize: 25.0),)
+            ],
+          ),
+        )
       ),
     );
   }
